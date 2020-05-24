@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -56,10 +59,24 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Base\BaseViewModel.cs" />
-    <Compile Include="User\ListInstance\ListInstance.cs" />
+    <Compile Include="Commands\NormalCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\IndexToEnableConverter.cs" />
+    <Compile Include="Converters\MultiCommandConverter.cs" />
+    <Compile Include="Logged\LoggedViewModel.cs" />
+    <Compile Include="LoggedWindow.xaml.cs">
+      <DependentUpon>LoggedWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main\MainViewModel.cs" />
+    <Compile Include="ListInstance\ListInstance.cs" />
+    <Compile Include="PasswordHelper\PasswordClass.cs" />
     <Compile Include="User\ViewModel\UserViewModel.cs" />
     <Compile Include="User\Model\UserModel.cs" />
     <Compile Include="User\StatusTypes\StatusTypes.cs" />
+    <Page Include="LoggedWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,6 +112,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -104,10 +122,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\" />
-    <Folder Include="Converters\" />
-    <Folder Include="Logged\" />
-    <Folder Include="Main\" />
     <Folder Include="NewUser\" />
   </ItemGroup>
   <ItemGroup>

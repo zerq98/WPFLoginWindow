@@ -6,17 +6,19 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows;
 
 namespace WPFLoginWindow
 {
     class ListInstance
     {
         #region Instance
-        public static ListInstance instance = new ListInstance();
+        public static ListInstance Instance = new ListInstance();
         #endregion
 
         #region Variables
-        public ObservableCollection<UserViewModel> users = new ObservableCollection<UserViewModel>();
+        public ObservableCollection<UserViewModel> users=new ObservableCollection<UserViewModel>();
+
         private string FilePath = "8999TM.bin";
         #endregion
         #region Constructor
@@ -30,15 +32,20 @@ namespace WPFLoginWindow
         /// <summary>
         /// Load database from file
         /// </summary>
-        private void LoadDatabase()
+        public void LoadDatabase()
         {
             if (File.Exists(FilePath))
             {
                 using (var stream = File.Open(FilePath, FileMode.Open, FileAccess.Read))
                 {
-                    var bin = new BinaryFormatter();
-                    users = (ObservableCollection<UserViewModel>)bin.Deserialize(stream);
+                    if (stream.Length > 0)
+                    {
+                        var bin = new BinaryFormatter();
+                        users = (ObservableCollection<UserViewModel>)bin.Deserialize(stream);
+                    }
+                    
                 }
+
             }
             else
             {
@@ -50,10 +57,10 @@ namespace WPFLoginWindow
         /// </summary>
         public void SaveDatabase()
         {
-            using (var stream = File.Open(FilePath, FileMode.Open, FileAccess.Read))
+            using (var stream = File.Open(FilePath, FileMode.OpenOrCreate))
             {
                 var bin = new BinaryFormatter();
-                bin.Serialize(stream, users);
+                bin.Serialize(stream, this.users);
             }
         }
         /// <summary>
@@ -77,7 +84,22 @@ namespace WPFLoginWindow
             user.lastModified = DateTime.Now;
             user.lastLogged = Convert.ToDateTime(null);
 
-            users.Add(user);
+            bool tmp = false;
+            foreach(UserViewModel us in users)
+            {
+                if (us.login == login) tmp = true;
+            }
+            if (!tmp)
+            {
+                users.Add(user);
+
+                users = new ObservableCollection<UserViewModel>(users.OrderBy(i => i.id));
+            }
+            else
+            {
+                MessageBox.Show("Login is already taken!");
+            }
+            
 
         }
         /// <summary>
@@ -106,7 +128,8 @@ namespace WPFLoginWindow
         /// <param name="id">Id of user to delete</param>
         public void RemoveUser(int id)
         {
-            users.RemoveAt(id);
+            if (users.Count > 1) users.RemoveAt(id);
+            else MessageBox.Show("I can't remove last user");
         }
         /// <summary>
         /// Edit user data
@@ -131,6 +154,25 @@ namespace WPFLoginWindow
             byte[] salt = Encoding.ASCII.GetBytes(id.ToString() + "8999Trybula");
             Rfc2898DeriveBytes rfc = new Rfc2898DeriveBytes(password, salt);
             return Encoding.ASCII.GetString(rfc.GetBytes(salt.Length));
+        }
+        /// <summary>
+        /// Check if user exists and if password is correct
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="password"></param>
+        /// <returns>Array of variables</returns>
+        public object[] CheckForUser(string login,string password)
+        {
+            foreach(UserViewModel user in users)
+            {
+                if (user.login == login)
+                {
+                    if (user.password == CodePass(user.id, password)) return new object[] { true, user };
+                    else return new object[] { false, "Wrong password!" };
+                }
+            }
+
+            return new object[] { false, "User not found!" };
         }
         #endregion
     }

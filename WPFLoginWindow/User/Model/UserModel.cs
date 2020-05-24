@@ -2,6 +2,7 @@
 
 namespace WPFLoginWindow
 {
+    [Serializable()]
     class UserModel
     {
         public int id;

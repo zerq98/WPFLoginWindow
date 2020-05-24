@@ -2,7 +2,8 @@
 
 namespace WPFLoginWindow
 {
-    class UserViewModel:BaseViewModel
+    [Serializable()]
+    public class UserViewModel:BaseViewModel, IComparable
     {
         private UserModel user = new UserModel();
 
@@ -94,6 +95,19 @@ namespace WPFLoginWindow
                 user.lastLogged = value;
                 OnPropertyChange("lastLogged");
             }
+        }
+
+        public string TimeString
+        {
+            get
+            {
+                return "Registered: " + registered.ToString() + " Last modified: " + lastModified.ToString() + " Last logged: " + lastLogged.ToString();
+            }
+        }
+
+        public int CompareTo(object obj)
+        {
+            return id.CompareTo(obj);
         }
         #endregion
     }

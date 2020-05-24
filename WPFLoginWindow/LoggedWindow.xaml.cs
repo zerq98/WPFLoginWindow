@@ -10,21 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace WPFLoginWindow
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for LoggedWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LoggedWindow : Window
     {
-        public MainWindow()
+        public LoggedWindow(UserViewModel user)
         {
             InitializeComponent();
-
-            this.DataContext = new MainViewModel();
+            this.DataContext = new LoggedViewModel(user);
         }
     }
 }

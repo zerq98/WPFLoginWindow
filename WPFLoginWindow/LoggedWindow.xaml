@@ -1,0 +1,87 @@
+﻿<Window x:Class="WPFLoginWindow.LoggedWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:WPFLoginWindow"
+        mc:Ignorable="d"
+        x:Name="loggedWindow" MinHeight="250" MinWidth="400" ShowInTaskbar="True" WindowStartupLocation="CenterScreen" Height="250" Width="0" ResizeMode="CanResize" BorderThickness="0" WindowStyle="None">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding WindowClosing}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoaded}" CommandParameter="{Binding ElementName=ControlPanel}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="30"/>
+    </WindowChrome.WindowChrome>
+    <StackPanel>
+        <Grid Height="30" WindowChrome.IsHitTestVisibleInChrome="False" Background="#3C3C3C">
+            <Label Height="30" Content="Login window" Foreground="WhiteSmoke"/>
+            <WrapPanel HorizontalAlignment="Right" Width="70" Margin="0,0,0,0">
+                <Button Command="{Binding Minimize, Mode=TwoWay}" CommandParameter="{Binding ElementName=loggedWindow}" WindowChrome.IsHitTestVisibleInChrome="True" Margin="2,0" Style="{DynamicResource Button.Hoverless}" Height="30" Width="30" Background="Transparent">
+                    <Image Source="Graphics/minimize.png"/>
+                </Button>
+                <Button Command="{Binding Close, Mode=TwoWay}" CommandParameter="{Binding ElementName=loggedWindow}" WindowChrome.IsHitTestVisibleInChrome="True" Margin="2,0" Style="{DynamicResource Button.Hoverless}" Height="30" Width="30" Background="Transparent">
+                    <Image Source="Graphics/close.png"/>
+                </Button>
+            </WrapPanel>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200*"/>
+                <ColumnDefinition Width="200*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
+                    <TextBlock Text="Login:" Width="50" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Center" />
+                    <TextBlock Text="{Binding user.login}" Width="80" Height="20" TextAlignment="Center" Margin="10,0,0,0"/>
+                </WrapPanel>
+                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
+                    <TextBlock Text="User status:" Width="70" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Center" />
+                    <TextBlock Text="{Binding user.status}" Width="80" Height="20" TextAlignment="Center" Margin="10,0,0,0"/>
+                </WrapPanel>
+                <WrapPanel x:Name="ControlPanel" Margin="0,50,0,0">
+                    <Button Height="30" Width="30" Style="{DynamicResource Button.Hoverless}" Background="Transparent" Margin="5,0" ToolTip="Exit" 
+                            Command="{Binding Close, Mode=TwoWay}" CommandParameter="{Binding ElementName=loggedWindow}">
+                        <Image Source="Graphics/close.png"/>
+                    </Button>
+                    <Button Height="30" Width="30" Style="{DynamicResource Button.Hoverless}" Tag="Admin" IsEnabled="False" 
+                            Background="Transparent" Margin="5,0" ToolTip="Add new user" Command="{Binding AddUser}">
+                        <Image Source="Graphics/addUser.png"/>
+                    </Button>
+                    <Button Height="30" Width="30" Style="{DynamicResource Button.Hoverless}" Tag="Moderator" IsEnabled="False" 
+                            Background="Transparent" Margin="5,0" ToolTip="Edit selected user" Command="{Binding EditUser}">
+                        <Image Source="Graphics/edit_task.png"/>
+                    </Button>
+                    <Button Height="30" Width="30" Style="{DynamicResource Button.Hoverless}" Tag="Admin" IsEnabled="False" 
+                            Background="Transparent" Margin="5,0" ToolTip="Remove selected user" Command="{Binding RemoveUser}" CommandParameter="{Binding ElementName=UsersList,Path=SelectedIndex}">
+                        <Image Source="Graphics/removeUser.png"/>
+                    </Button>
+                </WrapPanel>
+            </StackPanel>
+            <ListBox x:Name="UsersList" MinHeight="190" ScrollViewer.HorizontalScrollBarVisibility="Visible" 
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" ItemsSource="{Binding users}" 
+                     Grid.Column="1" Margin="0,10,0,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding LostFocus}" CommandParameter="{Binding ElementName=UsersList}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <TextBlock Text="{Binding id}" Width="20" Height="30" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding login}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" TextWrapping="Wrap" Width="50" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding status}" Width="50" Height="30" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding TimeString}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" TextWrapping="Wrap" Width="100" TextAlignment="Center"/>
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </StackPanel>
+</Window>
