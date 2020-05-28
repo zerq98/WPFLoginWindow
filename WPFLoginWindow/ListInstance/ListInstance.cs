@@ -43,6 +43,10 @@ namespace WPFLoginWindow
                         var bin = new BinaryFormatter();
                         users = (ObservableCollection<UserViewModel>)bin.Deserialize(stream);
                     }
+                    else
+                    {
+                        users = new ObservableCollection<UserViewModel>();
+                    }
                     
                 }
 
@@ -92,15 +96,13 @@ namespace WPFLoginWindow
             if (!tmp)
             {
                 users.Add(user);
-
-                users = new ObservableCollection<UserViewModel>(users.OrderBy(i => i.id));
             }
             else
             {
                 MessageBox.Show("Login is already taken!");
             }
-            
 
+            RefreshList();
         }
         /// <summary>
         /// Check for available id
@@ -130,6 +132,8 @@ namespace WPFLoginWindow
         {
             if (users.Count > 1) users.RemoveAt(id);
             else MessageBox.Show("I can't remove last user");
+
+            RefreshList();
         }
         /// <summary>
         /// Edit user data
@@ -138,8 +142,9 @@ namespace WPFLoginWindow
         public void EditUser(object[] param)
         {
             UserViewModel user = users[(int)param[0]];
-            user.password = param[1].ToString() != String.Empty ? CodePass((int)param[0], param[1].ToString()) : user.password;
-            user.status = (StatusTypes)param[2];
+            user.login = param[1].ToString();
+            user.password = param[2].ToString() != String.Empty ? CodePass((int)param[0], param[2].ToString()) : user.password;
+            user.status = (StatusTypes)((int)param[3]);
             user.lastModified = DateTime.Now;
             users[(int)param[0]] = user;
         }
@@ -173,6 +178,13 @@ namespace WPFLoginWindow
             }
 
             return new object[] { false, "User not found!" };
+        }
+        /// <summary>
+        /// Refreshing list and sort it
+        /// </summary>
+        private void RefreshList()
+        {
+            users = new ObservableCollection<UserViewModel>(users.OrderBy(i => i.id));
         }
         #endregion
     }

@@ -54,7 +54,7 @@ namespace WPFLoginWindow
         /// <param name="window"></param>
         private void _Close(Window window)
         {
-            if (window != null) Environment.Exit(1);
+            Environment.Exit(1);
         }
         /// <summary>
         /// Changing window state to minimize
@@ -76,7 +76,7 @@ namespace WPFLoginWindow
             {
                 LoggedWindow window = new LoggedWindow((UserViewModel)param[1]);
                 window.Show();
-                win.Hide();
+                win.Close();
             }
             else
             {

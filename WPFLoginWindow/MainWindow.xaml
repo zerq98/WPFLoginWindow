@@ -3,9 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:WPFLoginWindow"
         mc:Ignorable="d"
-        x:Name="MainScreen" MinHeight="250" MinWidth="400" ShowInTaskbar="True" WindowStartupLocation="CenterScreen" Height="250" Width="0" ResizeMode="NoResize" BorderThickness="0" WindowStyle="None">
+        x:Name="MainScreen" MinHeight="250" MinWidth="400" ShowInTaskbar="True" WindowStartupLocation="CenterScreen" 
+        Height="250" Width="0" ResizeMode="NoResize" BorderThickness="0" WindowStyle="None">
+    <i:Interaction.Triggers>
+        <i:KeyTrigger Key="Return">
+            <i:InvokeCommandAction Command="{Binding Login}" CommandParameter="{Binding ElementName=MainScreen}"/>
+        </i:KeyTrigger>
+    </i:Interaction.Triggers>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="30"/>
     </WindowChrome.WindowChrome>

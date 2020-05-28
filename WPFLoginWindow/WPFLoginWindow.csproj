@@ -69,6 +69,10 @@
     </Compile>
     <Compile Include="Main\MainViewModel.cs" />
     <Compile Include="ListInstance\ListInstance.cs" />
+    <Compile Include="ManageUser\ManageUserViewModel.cs" />
+    <Compile Include="ManageUserWindow.xaml.cs">
+      <DependentUpon>ManageUserWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PasswordHelper\PasswordClass.cs" />
     <Compile Include="User\ViewModel\UserViewModel.cs" />
     <Compile Include="User\Model\UserModel.cs" />
@@ -89,6 +93,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ManageUserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Style.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,9 +129,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewUser\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Graphics\addUser.png" />
     <Resource Include="Graphics\close.png" />

@@ -6,7 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:WPFLoginWindow"
         mc:Ignorable="d"
-        x:Name="loggedWindow" MinHeight="250" MinWidth="400" ShowInTaskbar="True" WindowStartupLocation="CenterScreen" Height="250" Width="0" ResizeMode="CanResize" BorderThickness="0" WindowStyle="None">
+        x:Name="loggedWindow" MinHeight="250" MinWidth="450" ShowInTaskbar="True" WindowStartupLocation="CenterScreen" Height="250" Width="0" ResizeMode="NoResize" BorderThickness="0" WindowStyle="None">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding WindowClosing}"/>
@@ -32,20 +32,20 @@
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200*"/>
+                <ColumnDefinition Width="160*"/>
                 <ColumnDefinition Width="200*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
                     <TextBlock Text="Login:" Width="50" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Center" />
-                    <TextBlock Text="{Binding user.login}" Width="80" Height="20" TextAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBlock Text="{Binding user.login}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Width="80" Height="20" TextAlignment="Center" Margin="10,0,0,0"/>
                 </WrapPanel>
                 <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
                     <TextBlock Text="User status:" Width="70" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Center" />
-                    <TextBlock Text="{Binding user.status}" Width="80" Height="20" TextAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBlock Text="{Binding user.status}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Width="80" Height="20" TextAlignment="Center" Margin="10,0,0,0"/>
                 </WrapPanel>
                 <WrapPanel x:Name="ControlPanel" Margin="0,50,0,0">
-                    <Button Height="30" Width="30" Style="{DynamicResource Button.Hoverless}" Background="Transparent" Margin="5,0" ToolTip="Exit" 
+                    <Button Height="30" Width="30" Style="{DynamicResource Button.Hoverless}" Tag=" " Background="Transparent" Margin="5,0" ToolTip="Exit"
                             Command="{Binding Close, Mode=TwoWay}" CommandParameter="{Binding ElementName=loggedWindow}">
                         <Image Source="Graphics/close.png"/>
                     </Button>
@@ -58,26 +58,20 @@
                         <Image Source="Graphics/edit_task.png"/>
                     </Button>
                     <Button Height="30" Width="30" Style="{DynamicResource Button.Hoverless}" Tag="Admin" IsEnabled="False" 
-                            Background="Transparent" Margin="5,0" ToolTip="Remove selected user" Command="{Binding RemoveUser}" CommandParameter="{Binding ElementName=UsersList,Path=SelectedIndex}">
+                            Background="Transparent" Margin="5,0" ToolTip="Remove selected user" Command="{Binding RemoveUser}" CommandParameter="{Binding ElementName=UsersList}">
                         <Image Source="Graphics/removeUser.png"/>
                     </Button>
                 </WrapPanel>
             </StackPanel>
-            <ListBox x:Name="UsersList" MinHeight="190" ScrollViewer.HorizontalScrollBarVisibility="Visible" 
-                     ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" ItemsSource="{Binding users}" 
-                     Grid.Column="1" Margin="0,10,0,0">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="LostFocus">
-                        <i:InvokeCommandAction Command="{Binding LostFocus}" CommandParameter="{Binding ElementName=UsersList}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
+            <ListBox x:Name="UsersList" Height="180" ScrollViewer.CanContentScroll="True" ItemsSource="{Binding users}" 
+                     Grid.Column="1" Margin="0,10,10,0" SelectedIndex="{Binding Index,Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <WrapPanel>
                             <TextBlock Text="{Binding id}" Width="20" Height="30" TextAlignment="Center"/>
                             <TextBlock Text="{Binding login}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" TextWrapping="Wrap" Width="50" TextAlignment="Center"/>
                             <TextBlock Text="{Binding status}" Width="50" Height="30" TextAlignment="Center"/>
-                            <TextBlock Text="{Binding TimeString}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" TextWrapping="Wrap" Width="100" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding TimeString}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" TextWrapping="Wrap" Width="180" TextAlignment="Center"/>
                         </WrapPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

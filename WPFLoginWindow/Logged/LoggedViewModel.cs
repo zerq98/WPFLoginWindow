@@ -17,7 +17,6 @@ namespace WPFLoginWindow
         public ICommand AddUser { get; set; }
         public ICommand RemoveUser { get; set; }
         public ICommand EditUser { get; set; }
-        public ICommand LostFocus { get; set; }
         #endregion
         #region Fields and properties
 
@@ -44,6 +43,20 @@ namespace WPFLoginWindow
             }
         }
 
+        private int index;
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+            set
+            {
+                index = value;
+                OnPropertyChange("Index");
+            }
+        }
+
         #endregion
         #region Constructor
         public LoggedViewModel(UserViewModel user)
@@ -53,10 +66,10 @@ namespace WPFLoginWindow
             Minimize = new RelayCommand<Window>(_Minimize);
             WindowClosing = new NormalCommand(Closing);
             WindowLoaded = new RelayCommand<WrapPanel>(windowLoaded);
-            LostFocus = new RelayCommand<ListBox>(lostFocus);
             AddUser = new NormalCommand(addUser);
-            RemoveUser = new RelayCommand<int>(removeUser);
-            EditUser = new RelayCommand<int>(editUser);
+            RemoveUser = new RelayCommand<ListBox>(removeUser);
+            EditUser = new NormalCommand(editUser);
+            this.Index = -1;
         }
         #endregion
         #region Methods
@@ -102,7 +115,7 @@ namespace WPFLoginWindow
             {
                 foreach (Button btn in panel.Children)
                 {
-                    if (btn.Tag.ToString() == "moderator")
+                    if (btn.Tag.ToString() == "Moderator")
                     {
                         btn.IsEnabled = true;
                     }
@@ -110,32 +123,26 @@ namespace WPFLoginWindow
             }
         }
         /// <summary>
-        /// Set selected index in list to -1
-        /// </summary>
-        /// <param name="box"></param>
-        private void lostFocus(ListBox box)
-        {
-            box.SelectedIndex = -1;
-        }
-        /// <summary>
         /// Remove user from collection
         /// </summary>
-        private void removeUser(int Index)
+        private void removeUser(ListBox box)
         {
-            if (Index > -1)
+            if (box.SelectedIndex > -1)
             {
-                if (Index != user.id) ListInstance.Instance.RemoveUser(Index);
+                if (ListInstance.Instance.users[box.SelectedIndex].id != user.id) ListInstance.Instance.RemoveUser(Index);
                 else MessageBox.Show("Cannot remove already logged user!");
             }
+
         }
         /// <summary>
         /// Open window for edit user
         /// </summary>
-        private void editUser(int Index)
+        private void editUser()
         {
             if (Index > -1)
             {
-                
+                ManageUserWindow window = new ManageUserWindow(ListInstance.Instance.users[Index], this.user.status);
+                window.ShowDialog();
             }
         }
         /// <summary>
@@ -143,7 +150,8 @@ namespace WPFLoginWindow
         /// </summary>
         private void addUser()
         {
-
+            ManageUserWindow window = new ManageUserWindow(null, this.user.status);
+            window.ShowDialog();
         }
         #endregion
     }
